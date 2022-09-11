@@ -1,0 +1,64 @@
+class CounterPlagin {
+  constructor({
+    rootSelector,
+    initialValue = 0,
+    step = 1,
+    onUpdate = () => null,
+  } = {}) {
+    this._value = initialValue;
+    this._step = step;
+
+    this._refs = this._getRefs(rootSelector);
+    this.onUpdate = onUpdate;
+    this._bindEvents();
+    this.updateValueUI();
+  }
+  _getRefs(rootSelector) {
+    const refs = {};
+    refs.container = document.querySelector(rootSelector);
+
+    refs.incrementBtn = refs.container.querySelector(
+      'button[data-action="increment"]'
+    );
+    refs.decrementBtn = refs.container.querySelector(
+      'button[data-action="increment"]'
+    );
+    refs.value = refs.container.querySelector("[data-value]");
+    console.log(refs.incrementBtn);
+    return refs;
+  }
+  _bindEvents() {
+    this._refs.incrementBtn.addEventListener("click", () => {
+      console.log("CounterPlugin.prototype._bindEvents -> this", this);
+      this.increment();
+      this.updateValueUI();
+    });
+    this._refs.decrementBtn.addEventListener("click", () => {
+      console.log("CounterPlugin.prototype._bindEvents -> this", this);
+      this.decrement();
+      this.updateValueUI();
+    });
+  }
+  updateValueUI() {
+    this._refs.value.textContent = this._value;
+    this.onUpdate();
+  }
+  increment() {
+    this._value += this._step;
+  }
+  decrement() {
+    this._value -= this._step;
+  }
+}
+
+new CounterPlagin({
+  rootSelector: "#counter",
+  step: 1,
+  initialValue: 1,
+  onUpdate: () => console.log("qwe"),
+});
+console.log("counter");
+
+// // counter.increment();
+// // counter.decrement();
+// // console.log(#counter);
